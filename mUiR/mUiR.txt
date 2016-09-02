@@ -1,0 +1,425 @@
+﻿Z lewej strony jest eksplorer
+obiekt do wyboru katalogu
+poszczegolne katalogi to obiekty
+rozne poziomy to rozne obiekty
+
+L0 - projekty
+L1 - osoby
+L2 - umowy
+L3 - rachunki
+
+root - L0
+
+SelectLevel(*)
+
+TreeView
+
+Projekt (katalog) (nowa osoba) (onclick load osoby)
+ Osoba (katalog) (nowa umowa) (onclick load umowy)
+ Osoba
+  Umowa (katalog) (nowy rachunek) (onclick load rachunki)
+  Umowa
+   Rachunek (katalog) (brak) (onclick load brak)
+   Rachunek
+   
+kontrolki z ktorymi jest powiazany jakis obiekt
+ TreeNode (object)
+ PictureBox (Control)
+ Label (Control)
+ ToolStripMenuItem (ToolStripItem)
+ 
+ kazdy katalog jest obiektem
+ na roznych poziomach sa rozne obiekty
+ w katalogu znajduje sie plik o takiej samej nazwie jak katalog i odpowiednim rozszerzeniu
+ opisujacy obiekt, jezeli w katalogu nie ma takiego pliku jest on tworzanony na podstawie nazwy katalogu (inicjowanie obiektu)
+ typ obieku okreslany jest na podstawie poziomu na jakim sie znajduje
+ 
+ historia zmian w katalogu _restore
+ 
+ Drzewo (kontener)
+  do drzewa są podłączane projekty
+  Connect, Atach, Disconnect
+  
+  projekt drzewa
+   na poziomie najwyzszym jest obiekt root
+   na typ samym poziomie beda dokladane projekty
+   
+   tylko jeden katalog w tym samym czasie moze byc podlaczony
+   
+   Root (katalog glowny, zbior projekto)
+    projekt (zbior osob, mozna wykorzystac jako kontener na rok, typ umowy)
+     osoba (zbior umow)
+      umowa na rok 2009
+       rachuenk
+      umowa na rok 2010
+       rachunek
+    projekt
+     osoba
+   
+   menu
+    projekt (nowa osoba, zmien nazwe, zwin|rozwin)
+     osoba (nowa umowa (o dzielo, na zlecenie), zmien nazwe, zwin|rozwin, dolacz zdjecie)
+      umowa (nowy rachunek, zmien nazwe, zwin|rozwin, dolacz plik)
+       rachunek (dolacz plik)
+   
+    projekt umowy o dzielo
+    projekt umowy na rok 2009
+    projekt umowy na zlecenie
+    
+    z kazdym wezlem drzewa powiazany jest plik danych node.xml, zawierajacy informacje o typie
+    obiektu i jego atrybutach
+    
+    panel boczny zawiera liste obiektow dla danego wezla
+     z kazdym wezlem w panelu bocznym powiazane jest takie samo menu jak z podwezlami w danym wezle
+     natomiast z samym panelem bocznym jest takie menu jak dla danego wezla
+     
+do danego katalogu moze byc podlaczonych wielu uzytkownikow i w tym samym
+czasie wielu moze tworzyc i usuwac obiekty, dlatego z kazdym bedzie
+powiazana informacja kto, gdzie i kiedy tworzy, modyfikuje lub usuwa obiekty
+
+
+Menu
+
+Przeglądarka projektu		Przeglądarka węzła
+
+
+Ostatnie zdarzenia
+ czas	uzytkownik	typObiektu	rodzaj	opis
+ 10		janek		umowa		insert	dodano nowy obiekt
+ 11		admin		projekt		loading	ladowanie projektu
+ 12		admin		projekt		loading	zakonczono ladowanie (bledy 0, ostrzezen 0, info 0)
+ 13		admin		projekt		unload	zamykanie projektu (zapisywanie pamieci)
+ 14		admin		konfig		change	zmiana konfiguracji projektu
+ 
+Pasek stanu
+
+dla kazdego rodzaju umowy bedzie oddzielny plik konfiguracyjny xml
+w pliku bedzie nazwa szablonu, nazwa rodzaju umowy
+konfiguracja procentow
+
+podczas startu program bedzie ladowal do pamieci pliki z rodzajami umow
+
+Lista plikow konfiguracyjnych
+     sa trzy grupy szablonow odzielo, nazlecenie i studenta
+	main.xml (plik konfiguracyjny zawiera informacje jakie szablony sa aktywne w danej grupie)
+	umowy
+	  plik konfiguracyjny szablonu zawiera jego nazwe, opis oraz typ do jakiego nalezy (odzielo, nazlecenie inny)
+	 odzielo.xml (nazwa, opis, typ)
+	 odzielo.rtf
+	 nazlecenie.xml
+	 nazlecenie.rtf
+	 nazleceniestudent.xml
+	 nazleceniestudent.rtf
+	 
+	 drzewo osob, umow i rachunkow
+	 
+	 drzewo konfiguracji
+apppath (mainconfig)
+ rodzajeumow (nowy rodzaj aktywny, typ)
+  umowaa (zmien, usun, typ)
+  umowab
+  umowac
+  
+  jezeli dwoch uzytkownikow pracuje na tym samej lokacji to
+  maja rozne rodzaje umow i rozna konfiguracje
+  gdy tworzony jest rachunek z szablonu to brany jest szablon lokalny
+  czyli dla tych uzytkownikow ten sam rachunek moze wybgladac inaczej
+   aby uzytkownicy nie zmieniali sobie nawzajem rachunkow, rachunek
+   musi zawierac informacje z jakiego szablonu zostal wygenerowany i 
+   przez jakiego uzytkownika, jezeli ktos inny bedzie chcial zmienic
+   czyjs rachunek musi zostal o tym powiadomiony ze zmienia nie swoj
+   rachunek, aby zabezpieczyc rachuenk przed modyfikacja kazdy rachunek
+   bedzie oznaczany jako (prywaty lub publiczny - rachunek prywatny nie
+   moze byc modyfikowany przez innych, bedzie zablokowany)
+   
+   ??? szablon z czasem moze sie zmienic dla danej umowy, jak wtedy traktowac
+   stare rachunki jezeli bedzie dosteplny nowy szablon dla umowy
+   w takiej sytuacji albo z typem umowy bedzie zwiazany jeden szablon
+   albo z typem umowy bedzie zwiazanych wiele szablonow
+   jezeli jest jeden szablon dla umowy to juz utworzone rachunki beda zachowane tak jak byly
+   jezeli jest wiele szablonow dla danego typu umowy to podczas tworzenia rachunku trzeba
+   bedzie wybrac ktory szablon bedzie uzyty (uzyty bedzie szablon aktywny)
+   
+   kazdy wezel ma nazwe oraz tekst go opisujacy
+   nazwa bedzie zgadzac sie z nazwa katalogu
+   ale tekst bedzie zawieral nazwe oraz wlasciciela (opcjonalnie)
+    kazdy obiekt ma wlasciciela (tworce)
+    
+    
+  drzewo obiektow
+   rozne typy obiektow znajduja sie na roznych poziomach
+   jezeli chcemy utowrzyc nowe drzewo obiektowe to musimy
+   okreslic jakie obiekty znajduja sie na jakich poziomach
+   kazdy katalog w takim drzewie to jeden obiekt, a podkatalogi
+   w takim katalogu to obiekty do niego nalezace
+   kazde takie drzewo obiektowe jest oparte na systemie plikow i 
+   moze przypominac baze danych, drzewo takie podpinane jest pod
+   jeden katalog ktory jest stale monitorowany i wszelkie zmiany
+   dokonane na systemie plikow sa odzwierciedlane na drzewie
+    w takim drzewie na danym poziomie moga byc obiekty tylko jednego rodzaju
+    jezeli widzimy ze na danym poziomie potrzeba innego rodzaju obiektu
+    to musimy utworzyc nowy schemat drzewa i umiescic je w innej lokacji
+    
+  w programie mozna wyroznic dwa drzewa obiekowe
+   drzewo konfiguracji podpiete do glownego katalogu programu
+   oraz drzewo glowne z obiektami osob umow i rachunkow 
+  
+  schemat: lokacja(0) osoba(1) umowa(2) rachunek(3)
+  schemat: program(0) aktywnyszablon(1) szablon(2)
+  
+  z kazdym wezlem takiego drzewa powiazany jest obiekt
+  natomiast z obiektem powiazane jest pewne menu
+  kazde menu zawiera elementy podstawowe
+   
+   dodaj (rodzaj obiektu jaki mozna dodac do danej galezi lub brak jezeli nie mozna)
+   usun (lub brak jezeli nie mozna)
+   wlasciwosci/edytuj
+   
+    co do menu i zdarzen
+    kazde zdarzenie ma sender
+    sender zawiera zawiera Text oraz Tag
+    Text - to nazwa metody
+    Tag - to obiekt
+    na podstawie nazwy oraz obiektu decydujemy co zrobic
+    
+    podstawowe operacje na obiekcie to jego tworzenie, zmiana nazwy oraz usuwanie
+    tworzenie nastepuje przez inne obiekty
+    
+    jezeli projekt jest za dlugi to trzeba 
+    skrocic sciezke zastepujac trzema kropkami np. c:\...\projekt
+    
+    ? czy pelna sciezka jest tworzona z nazw czy z tekstow
+     z tekstow
+     
+    z kazdym wezlem bedzie powiazany tooltip
+    skoro kazdy wezel to katalog to w menu powinna byc
+    opcja do otwarcia katalogu w eksplorerze windowsa
+    
+    pamietaj kartezjusza, podziel problem na podproblemy
+    jezeli problem jest zbyt zlozony i zajmuj sie kazdym
+    podproblemem jezeli podproblem jest zbyt zlozony podziel go na 
+    kolejne podproblemy
+    
+    drzewo obiektowe
+     pod dane drzewo mozna podlaczyc inna lokacje
+     dana lokacja powinna zawierac schemat danego drzewa
+     czyli jakie obiekty mozna w nim tworzyc
+     
+    w programie mozna podlaczyc lokacje z osobami, umowami i rachunkami
+    lub lokacje z konfiguracja i szablonami umow
+    
+  Warstwa systemu plików
+   createNode
+   deleteNode
+   renameNode
+   
+  Warstwa aplikacji
+   
+  Synchronizacja
+   na lokacji mozna pracowac w trybie online lub offline
+   w trybie online wszystkie zmiany dokonane sa natyczmiast zapisywane
+   w trybie onffline zmiany beda zapisywane na zadanie
+   
+  Rodzaje umow i rachunkow
+   typy umow i rachunkow beda reprezentowane przez
+   katalogi w glownym katalogu programu
+   
+   rodzaje umow
+    umowa o dzielo
+     szablon rachunku do umowy domyslny
+     szablon rachunku do umowy uzytkownika
+    umowa na zlecenie
+     szablon domyslny
+    umowa na zlecenie - student
+     szablon domyslny
+     
+   rodzaje rachunkow
+    rachunek normalny
+    rachunek czesciowy
+    rachunek ostateczny
+    
+    
+   do umowy dodac atrybut na jaka kwote jest umowa
+    teraz jak dodawane sa rachunki bedzie sprawdzane czy
+    nie zostala przekroczona wartosc calkowita umowy
+    kolorem zielonym oznaczane sa umowy zamkniete dla ktorych 
+    zostaly wystawione wszystkie rachunki i zostala juz zamknieta
+    kolorem czerwonym beda oznaczane umowy otware dla ktorych 
+    suma wartosci rachunkow jest mniejsza od wartosci umowy
+    
+   gdy do umowy dodawany jest rachunek normalny lub ostateczny umowa jest zamykana
+   gdy do umowy dodawany jest rachunek czesciowy umowa jest ostwarta
+   gdy do umowy dodawany jest rachunek sprawdzane jest czy nie jest przekroczona kwota umowy
+
+
+formularz na dany miesiac (kto-autor-pracownia)
+ grupa rachunkow na dany miesiac (na zaklad)
+  osoba rodzaj-umowy kwota robota-z1 robota-z2 (tak/nie)
+
+formularz z rachunkami na dany miesiac jest tworzony
+przez kierownika zespolu, ktory jest przekazywany dyrektorowi zakladu
+dyrektor zakladu dopiero zatwierdza taki formularz
+z takiego formularza tworzone sa rachunki do poszczegolnych umow i na
+podane roboty, na dana kwote
+na koniec tworzony jest raport
+ jezeli jest ok to bedzie mozna stworzyc zestawienie miesieczne z takiego formularza (przez dyrektora), ktore
+ jest przekazywane do ksiegowosci
+
+podaj nazwe uzytkownika
+ administrator
+ dyrektor zakladu, kierownik zespolu
+ login, haslo, numer zakladu
+
+ dyrektorzy loguja sie na zaklad
+ dyrektorzy moga tworzyc osoby umowy i rachunki oraz zatwierdzac formularze miesieczne tworzone przez kierownikow
+ kierownicy moga tworzyc osoby oraz formularze
+ administrator moze dodawac zaklady oraz tworzyc konta uzytkownikow tj. dyrektorzy oraz kierownicy
+ uzytkownik moze zmieniac nazwe oraz haslo
+
+umowa jest na dany okres (od miesiac - do miesiac)
+
+dostep przez aplikacje, www, baza danych mysql, mssql, access
+
+program powinien pozwolic na tworzenie raportow i zestawien
+na podstawie danych oraz podanego okresu tj. miesieczny, polroczny, roczny
+
+dostep do poszczegolnych poziomow jest ograniczony przez odpowiednie uprawnienia
+
+klasy uzytkownikow
+ admin
+ dyrektor
+ kierownik
+ pracownik
+
+do glownej bazy kontrola na poziomie loginu i hasla
+
+Panel
+widok osob umow i rachunkow
+=========================== 
+ 
+ plik : obiekt
+
+ osoby : obiekt
+  dodaj (admin, dyrektor, kierownik)
+  usun (admin, dyrektor, kierownik)
+  zmien (admin, dyrektor, kierownik)
+  pokaz (admin, dyrektor, kierownik, pracownik)
+  
+ umowy : obiekt (read, write, view) (select, insert, update, delete)
+  dodaj (admin, dyrektor)
+  usun (admin, dyrektor)
+  zmien (admin, dyrektor)
+  pokaz (admin, dyrektor, kierownik)
+  zamknij (admin, dyrektor)
+  dodajDokument
+  usunDokument
+  wygenerujNaPodstawieSzablonu
+
+ rachunki - plik do umowy z wynagrodzeniem
+  dodaj (admin, dyrektor)
+  usun (admin, dyrektor)
+  zmien (admin, dyrktor)
+  pokaz (admin, dyrektor, kierownik)
+  zatwierdz (admin, dyrektor)
+  wygenerujNaPodstawieSzablonu
+
+ zdjecia : plik
+  otworz
+  zapisz
+  dodaj
+  usun
+
+ dokumenty : plik
+  otworz
+  zapisz
+  dodaj
+  usun
+  zmien
+
+ szablonyumow : plik
+  dodaj
+  usun
+
+ szablonyrachunkow : plik
+  dodaj
+  usun
+
+ rodzajeumow : obiekt
+
+ rodzajerachunkow : obiekt
+
+ uzytkownicy : obiekt
+  dodaj (admin, dyrektor)
+  usun (admin, dyrektor)
+  zmien (admin, dyrektor, self)
+  dodajAdmin (admin)
+  dodajDyrektor (admin)
+  dodajKierownik (admin, dyrektor)
+  dodajPracownik (admin, dyrektor, kierownik)
+  dodajTyp (typ)
+
+ grupyuzytkownikow : obiekt (admin, dyrektor, kierownik, pracownik)
+  dodaj(typ, kto)
+  usun(kto)
+  
+Widok admina
+Widok dyrektora
+Widok kierownika
+Widok pracownika
+
+Panel
+Widok formularzy miesiecznych
+=============================
+ formularz - grupa osob na dany miesiac dla ktorych beda wystawiane rachunki
+  dodaj (admin, dyrektor, kierownik)
+  usun (admin, dyrektor, kierownik)
+  zmien (admin, dyrektor, kierownik)
+  pokaz (admin, dyrektor, kierownik)
+  zatwierdz (admin, dyrektor) 
+  eksportuj (admin, dyrektor, kierownik) po zatwierdzeniu
+
+Panele:
+ do zarzadzania osobami, umowami i rachunkami
+ do zarzadzania kontami uzytkownikow i grupami (uprawnieniami)
+ do zarzadzania miesiecznymi formularzami
+ do edycji wlasciwosci obiektow
+
+do kazdego obiektu mozna podczepic plik z szablonem i na podstawie jego
+atrybutow wyeksportowac go do pliku
+
+obiekt - interface
+ applyTemplateFile
+ assignTemplateFile
+ viewByTemplatev
+ viewRawTemplateFile
+ exportByTemplate(tpl, outFile)
+ exportToXML
+
+dla kazdego typu obiektu beda rozne typy szablonow
+ szablony umow
+ szablony rachunkow
+ szablony osob
+ szablony formularzy miesiecznych
+
+wybor aktywnych osob na dany miesiac dla ktorych beda tworzone rachunki
+tylko te osoby beda widoczne
+kiedy formularz bedzie gotowy kierownik oznaczy go jako ukonczony
+a gdy dyrektor sie zaloguje to dostanie wiadomosc ze jest juz gotowy
+formularz na dany miesiac przygotowany przez kierownika
+
+dyrektora tworzy admin
+lokacje moze utworzyc tylko dyrektor
+ dyrektor jest pierwszym uzytkownikiem w lokacji
+ dyrektor dodaje kierownikow
+  dla kazdego kierownika zakladany jest plik
+  w ktorym beda trzymane aktywne osoby w danym miesiacu
+  gdy kierownik ma przygotowana grupe oznacza ja jako do wiadomosci dyrektora
+ dyrektor ma dostep do grup aktywnych osob kazdego kierownika
+ 
+ do lokacji przypisany jest domyslny admin4
+ na lokacji trzymane sa pliki dyrektora
+ 
+ kierownicy trzymaja pliki lokalnie
+  gdy grupa jest gotowa kopiowana jest do lokacji lub zapisywana w pliku
+  
+ gdy dyrektor zatwierdza grupe jest ona usuwana z lokacji

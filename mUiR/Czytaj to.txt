@@ -1,0 +1,14 @@
+﻿mUiR v1.0 - Zarządzanie umowami i rachunkami
+Copyright (c) 2009 OPGK Olsztyn. Wszelkie prawa zastrzeżone.
+Data publikacji: 28 października 2011
+
+Nowe funkcje:
+
+** Zmiany (historia)
+Do zrobienia
+
+2011-11-28 v1.0
+* pierwsza wersja
+
+2009-11-23 v1.0-beta
+* pierwsza wersja testowa
